@@ -28,7 +28,8 @@ public class AttrGraph {
         
         String url;
         //url = "/depot/Work/Academic/Students/PhD/Atakan Aral/javaParser";
-          url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
+        //url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
+        url="/home/atakan/javaParser";
         //url = "C:/javaParser";
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
         
@@ -48,6 +49,10 @@ public class AttrGraph {
         //Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
         
         Clusterer c = new Clusterer();
+        System.out.println("Call Graph\n\n");
+        c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
+
+        System.out.println("\n\nAccess Graph\n\n");
         c.cluster(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
         
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");

@@ -5,6 +5,7 @@
 package attrgraph;
 
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
+import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -19,19 +20,17 @@ import java.util.TreeMap;
  */
 public class Clusterer {
     private HashMap<Integer,String> vertexDict;
-    private Graph<Integer,Integer> localG;
     private TreeMap<Integer,Integer> clustersIndexed;
     
     public Clusterer(){
         vertexDict = new HashMap<Integer,String>();
-        localG = new SparseGraph<Integer,Integer>();
         clustersIndexed = new TreeMap<Integer,Integer>();
     }
     
     public void cluster(Graph<String,Integer> g){
         hashVertex(g);
         
-        EdgeBetweennessClusterer<String,Integer> clusterer = new EdgeBetweennessClusterer<String,Integer>(g.getEdgeCount()/5);
+        WeakComponentClusterer<String,Integer> clusterer = new WeakComponentClusterer<String,Integer>();
         
         Set<Set<String>> clusters = clusterer.transform(g);
         
@@ -42,11 +41,14 @@ public class Clusterer {
                 clustersIndexed.put(s.hashCode(), i);
             i++;
         }
-
+        
         System.out.print("c(");
         for(Map.Entry<Integer,Integer> e:clustersIndexed.entrySet())
             System.out.print(e.getValue()+",");
         
+        
+        vertexDict.clear();
+        clustersIndexed.clear();
         
     }
     

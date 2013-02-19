@@ -28,7 +28,8 @@ public class AttrGraph {
         
         String url;
         //url = "/depot/Work/Academic/Students/PhD/Atakan Aral/javaParser";
-        url = "C:/javaParser";
+          url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
+        //url = "C:/javaParser";
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
         
         for(File f : FileUtils.listFiles(new File(url), new String[]{"java"}, true)){
@@ -44,8 +45,10 @@ public class AttrGraph {
 
         //Visualizer.visualizeGraph(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
         
-        Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
+        //Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
         
+        Clusterer c = new Clusterer();
+        c.cluster(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
         
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
         //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));

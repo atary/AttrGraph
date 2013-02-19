@@ -96,7 +96,7 @@ public class Parser {
                 method = getMethodClass(method) + "." + method;
             }            
             temp.add(method + "|" + attr);
-            System.out.println(method + "|" + attr);
+            //System.out.println(method + "|" + attr);
         }
         return temp;
     }
@@ -317,7 +317,7 @@ public class Parser {
             e=e.split("\\[")[0];
             if(!e.contains("\\.")){
                 String temp = (String) arg;
-                //accesses.add(temp+"|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
+                accesses.add(temp+"|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
             }
         }
     }

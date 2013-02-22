@@ -58,10 +58,8 @@ public class Grapher {
         for(String c : calls){
             tmp1=c.split("->")[0];
             tmp2=c.split("->")[1];
-            tmp1=tmp1.substring(tmp1.lastIndexOf('/')+1);
-            tmp2=tmp2.substring(tmp2.lastIndexOf('/')+1);
-            //g.addEdge(id++,""+tmp1.hashCode(),""+tmp2.hashCode());
-            g.addEdge(id++,c.split("->")[0], c.split("->")[1]);
+            if(!methods.contains(tmp1) || !methods.contains(tmp2)) continue;
+            g.addEdge(id++, tmp1, tmp2);
         }
         
         return g;

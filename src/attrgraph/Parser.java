@@ -85,8 +85,20 @@ public class Parser {
         return temp;
     }
     
-    public HashSet<String> getAccesses() {
+    public HashSet<String> getInternalCalls() {
         HashSet<String> temp = new HashSet<>();
+        for(String call : calls){
+            String caller = call.split("\\|")[0];
+            String callee = call.split("\\|")[1];
+            String className = caller.substring(0, caller.lastIndexOf('.'));
+            temp.add(caller + "->" + className + "." + callee);
+        }
+        return temp;
+    }
+    
+    public HashSet<String> getAccesses() {
+        return accesses;
+        /*HashSet<String> temp = new HashSet<>();
         for(String access : accesses){
             String method = access.split("\\|")[0];
             String attr = access.split("\\|")[1];
@@ -94,9 +106,8 @@ public class Parser {
                 method = getMethodClass(method) + "." + method;
             }            
             temp.add(method + "|" + attr);
-            //System.out.println(method + "|" + attr);
         }
-        return temp;
+        return temp;*/
     }
     
     public HashSet<String> getAttributes() {
@@ -292,15 +303,16 @@ public class Parser {
             if(n.getArgs()!=null){
                 numArgs = n.getArgs().size();
                 
-                for(Expression argExpr : n.getArgs()){
+                /*for(Expression argExpr : n.getArgs()){
                     String e = argExpr.toString();
                     e=e.replace("this.", "");
                     e=e.split("\\[")[0];
-                    if(!e.contains("\\.")){
+                    e=e.split("\\.")[0].trim();
+                    if(!e.contains(" ")){
                         String temp = (String) arg;
-                        accesses.add(n.getName()+"|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
+                        accesses.add(n.getName()+"("+numArgs+")|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
                     }
-                }
+                }*/
             }
             calls.add(((String) arg)+"|"+n.getName()+"("+numArgs+")");
         }

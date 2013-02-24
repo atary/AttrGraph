@@ -26,7 +26,7 @@ public class Visualizer {
             layout.setSize(new Dimension(1250,994)); // sets the initial size of the space
             BasicVisualizationServer<String, Integer> vv = new BasicVisualizationServer<String, Integer>(layout);
             vv.setPreferredSize(new Dimension(1265,986)); //Sets the viewing area size
-            //vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
+            vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
             vv.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
             JFrame frame = new JFrame("Graph with "+g.getVertexCount()+" vertices and "+g.getEdgeCount()+" edges.");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

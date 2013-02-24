@@ -30,8 +30,11 @@ public class AttrGraph {
         //url = "/depot/Work/Academic/Students/PhD/Atakan Aral/javaParser";
         //url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
         //url="/home/atakan/javaParser";
-        url = "C:/javaParser";
+        //url = "C:/javaParser";
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
+        
+        //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/HighRandIndexSample";
+        url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/LowRandIndexSample";
         
         for(File f : FileUtils.listFiles(new File(url), new String[]{"java"}, true)){
             classParser.parse(f);
@@ -44,11 +47,11 @@ public class AttrGraph {
         //classParser.printMethodCalls();
         //classParser.printMethodClasses();
 
-        Visualizer.visualizeGraph(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
+        //Visualizer.visualizeGraph(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
         
-        //Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
-        
-        /*Clusterer c = new Clusterer();
+        Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
+        /*
+        Clusterer c = new Clusterer();
         System.out.println("Call Graph\n\n");
         c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
 

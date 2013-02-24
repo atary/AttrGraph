@@ -97,8 +97,7 @@ public class Parser {
     }
     
     public HashSet<String> getAccesses() {
-        return accesses;
-        /*HashSet<String> temp = new HashSet<>();
+        HashSet<String> temp = new HashSet<>();
         for(String access : accesses){
             String method = access.split("\\|")[0];
             String attr = access.split("\\|")[1];
@@ -107,7 +106,7 @@ public class Parser {
             }            
             temp.add(method + "|" + attr);
         }
-        return temp;*/
+        return temp;
     }
     
     public HashSet<String> getAttributes() {
@@ -303,7 +302,7 @@ public class Parser {
             if(n.getArgs()!=null){
                 numArgs = n.getArgs().size();
                 
-                /*for(Expression argExpr : n.getArgs()){
+                for(Expression argExpr : n.getArgs()){
                     String e = argExpr.toString();
                     e=e.replace("this.", "");
                     e=e.split("\\[")[0];
@@ -312,7 +311,7 @@ public class Parser {
                         String temp = (String) arg;
                         accesses.add(n.getName()+"("+numArgs+")|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
                     }
-                }*/
+                }
             }
             calls.add(((String) arg)+"|"+n.getName()+"("+numArgs+")");
         }

@@ -9,6 +9,7 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.*;
 import japa.parser.ast.expr.*;
+import japa.parser.ast.stmt.ExpressionStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -102,6 +103,7 @@ public class Parser {
             String method = access.split("\\|")[0];
             String attr = access.split("\\|")[1];
             if(!method.contains(".")){
+                //System.out.println(method + " accesses " + attr);
                 method = getMethodClass(method) + "." + method;
             }            
             temp.add(method + "|" + attr);
@@ -304,16 +306,72 @@ public class Parser {
                 
                 for(Expression argExpr : n.getArgs()){
                     String e = argExpr.toString();
-                    e=e.replace("this.", "");
+                    //System.out.println(e);
+                    //System.out.println("     " + getAttributes(e.trim()).toString());
+                    String cl = (String) arg;
+                    cl = cl.substring(0, cl.lastIndexOf('.'));
+                    for(String t : getAttributes(e)){
+                        accesses.add(n.getName()+"("+numArgs+")|"+cl+"."+t);
+                    }
+                    
+                    /*e=e.replace("this.", "");
                     e=e.split("\\[")[0];
                     e=e.split("\\.")[0].trim();
                     if(!e.contains(" ")){
                         String temp = (String) arg;
                         accesses.add(n.getName()+"("+numArgs+")|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
-                    }
+                    }*/
                 }
             }
             calls.add(((String) arg)+"|"+n.getName()+"("+numArgs+")");
+        }
+        
+        private HashSet<String> getAttributes(String e){
+            Boolean parted = false;
+            HashSet<String> attrs = new HashSet<String>();
+            String t = e;
+            t = t.replace("(","");
+            t = t.replace(")","");
+            t = t.replace("[","");
+            t = t.replace("]","");
+            t = t.replace("{","");
+            t = t.replace("}","");
+            t = t.replace(".","");
+            String[] operators = {"\"",",", "\\+", "-", "/", "*", "%", "==", "=", "!=", "<", ">", ">=", "<=", "||", "&&"};
+            for(String operator : operators){
+                t = t.replace(operator,"");
+                if(t.length()<2) continue;
+                if(!e.contains(operator)) continue;
+                parted = true;
+                for(String part : e.trim().split(operator)){
+                    attrs.addAll(getAttributes(part.trim()));
+                }
+            }
+            if(e.contains("[") && e.contains("]")){
+                String inner = e.substring(e.indexOf("["), e.lastIndexOf("]"));
+                attrs.addAll(getAttributes(inner));
+            }
+            if(e.contains("(") && e.contains(")")){
+                String inner = e.substring(e.indexOf("("), e.lastIndexOf(")"));
+                attrs.addAll(getAttributes(inner));
+            }
+            if(e.contains("{") && e.contains("}")){
+                String inner = e.substring(e.indexOf("{"), e.lastIndexOf("}"));
+                attrs.addAll(getAttributes(inner));
+            }
+            
+            if(t.length()>0 && !parted){
+                e=e.replace("this.", "");
+                e=e.replace("++", "");
+                e=e.replace("--", "");
+                e=e.replace("new ", "");
+                e=e.split("\\[")[0];
+                e=e.split("\\(")[0];
+                e=e.split("\\{")[0];
+                e=e.split("\\.")[0].trim();
+                attrs.add(e);
+            }
+            return attrs;
         }
     }
     
@@ -325,8 +383,9 @@ public class Parser {
             e=e.replace("this.", "");
             e=e.split("\\[")[0];
             if(!e.contains("\\.")){
-                String temp = (String) arg;
-                accesses.add(temp+"|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
+                String mt = (String) arg;
+                String cl = mt.substring(0, mt.lastIndexOf('.'));
+                accesses.add(mt+"|"+cl+"."+e);
             }
         }
     }

@@ -34,8 +34,8 @@ public class AttrGraph {
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
         
         //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/HighRandIndexSample";
-        url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/LowRandIndexSample";
-        
+        //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/LowRandIndexSample";
+        url = "C:/Users/Æ/Desktop/Dropbox/Tolga Ovatman/JavaParser/javaParser";
         for(File f : FileUtils.listFiles(new File(url), new String[]{"java"}, true)){
             classParser.parse(f);
         }
@@ -50,6 +50,7 @@ public class AttrGraph {
         //Visualizer.visualizeGraph(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
         
         Visualizer.visualizeGraph(Grapher.getAccessGraph(classParser.getMethods(), classParser.getAttributes(), classParser.getAccesses()));
+
         /*
         Clusterer c = new Clusterer();
         System.out.println("Call Graph\n\n");

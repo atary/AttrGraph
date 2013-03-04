@@ -7,9 +7,14 @@ package attrgraph;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.*;
-import japa.parser.ast.expr.*;
-import japa.parser.ast.stmt.ExpressionStmt;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.body.FieldDeclaration;
+import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.VariableDeclarator;
+import japa.parser.ast.expr.AssignExpr;
+import japa.parser.ast.expr.Expression;
+import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -201,7 +206,7 @@ public class Parser {
         public void visit(ClassOrInterfaceDeclaration n, Object arg) {
             String classNamewithPack= ((String) arg).trim() + "." + n.getName().trim();
             classes.add(classNamewithPack);
-            new FieldVisitor().visit(n,classNamewithPack);
+            //new FieldVisitor().visit(n,classNamewithPack);
             new MethodVisitor().visit(n,classNamewithPack);
             new ConstructorVisitor().visit(n,classNamewithPack);
         }
@@ -228,9 +233,9 @@ public class Parser {
                 conflicts.add(s);
             }
             
-            new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
+            //new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
             new MethodCallVisitor().visit(n, ((String) arg).trim()+"."+s);
-            new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
+            //new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
         }
     }
 
@@ -258,9 +263,9 @@ public class Parser {
                 //System.out.println("WARNING: Method "+n.getName()+" exists in both "+prev+" and "+((String) arg).trim()+" classes.");
             }
             
-            new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
+            //new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
             new MethodCallVisitor().visit(n, ((String) arg).trim()+"."+s);
-            new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
+            //new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
         }
     }
     

@@ -5,24 +5,9 @@
 package attrgraph;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import java.util.HashMap;
-/*import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.BodyDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
-import japa.parser.ast.body.Parameter;
-import japa.parser.ast.body.TypeDeclaration;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.stmt.ExpressionStmt;
-import japa.parser.ast.stmt.Statement;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;*/
 import java.util.HashSet;
 
 
@@ -44,7 +29,32 @@ public class Grapher {
             in.close();
         }
     }*/
+    
+    public static Graph<String, Integer> getMethodLayoutGraph(HashSet<String> methods){
+        Graph<String, Integer> g = new SparseGraph<String, Integer>();
 
+        for(String m : methods){
+            g.addVertex(m);
+        }       
+        int id =0;
+        
+        for(String m1 : methods){
+            for(String m2 : methods){
+                if(m1.equals(m2)) continue;
+                
+                String c1 = m1.substring(0, m1.lastIndexOf('.'));
+                String c2 = m2.substring(0, m2.lastIndexOf('.'));
+                
+                if(c1.equals(c2)){
+                    g.addEdge(id++, m1, m2);
+                }
+
+            }
+        }
+        
+        return g;
+    }
+    
     public static Graph<String, Integer> getCallGraph(HashSet<String> methods, HashSet<String> calls){
         Graph<String, Integer> g = new DirectedSparseGraph<String, Integer>();
         String tmp1,tmp2;
@@ -60,6 +70,49 @@ public class Grapher {
             tmp2=c.split("->")[1];
             if(!methods.contains(tmp1) || !methods.contains(tmp2)) continue;
             g.addEdge(id++, tmp1, tmp2);
+        }
+        
+        return g;
+    }
+    
+    
+
+    public static Graph<String, Integer> getCoopMethodsGraph(HashSet<String> methods, HashSet<String> calls){
+        Graph<String, Integer> g = new SparseGraph<String, Integer>();
+        String caller,callee;
+        for(String m : methods){
+            //g.addVertex(""+(m.substring(m.lastIndexOf('/')+1)).hashCode());
+            g.addVertex(m);
+        }
+        
+        HashMap<String, String> connections = new HashMap<>();
+        
+        for(String c : calls){
+            caller=c.split("->")[0];
+            callee=c.split("->")[1];
+            
+            if(!methods.contains(callee)) continue;
+            
+            if(!connections.containsKey(caller)){
+                connections.put(caller, callee);
+            }
+            else{
+                String value = connections.get(caller);
+                connections.put(caller, value+"|"+callee);
+            }
+        }
+        
+        int id = 0;
+        
+        for(String callerMethod : connections.keySet()){
+            String methodString = connections.get(callerMethod);
+            String[] methodArray = methodString.split("\\|");
+            for(String m1:methodArray){
+                for(String m2:methodArray){
+                    if(m1.equals(m2)) continue;
+                    g.addEdge(id++, m1, m2);
+                }
+            }
         }
         
         return g;

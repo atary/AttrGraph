@@ -206,7 +206,7 @@ public class Parser {
         public void visit(ClassOrInterfaceDeclaration n, Object arg) {
             String classNamewithPack= ((String) arg).trim() + "." + n.getName().trim();
             classes.add(classNamewithPack);
-            //new FieldVisitor().visit(n,classNamewithPack);
+            new FieldVisitor().visit(n,classNamewithPack);
             new MethodVisitor().visit(n,classNamewithPack);
             new ConstructorVisitor().visit(n,classNamewithPack);
         }
@@ -235,7 +235,7 @@ public class Parser {
             
             //new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
             new MethodCallVisitor().visit(n, ((String) arg).trim()+"."+s);
-            //new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
+            new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
         }
     }
 
@@ -265,7 +265,7 @@ public class Parser {
             
             //new MethodFieldVisitor().visit(n,((String) arg).trim()+"|"+n.getName());
             new MethodCallVisitor().visit(n, ((String) arg).trim()+"."+s);
-            //new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
+            new AttributeAccessVisitor().visit(n, ((String) arg).trim()+"."+s);
         }
     }
     
@@ -289,7 +289,7 @@ public class Parser {
     }    
     
     
-    private class MethodFieldVisitor extends VoidVisitorAdapter {
+    /*private class MethodFieldVisitor extends VoidVisitorAdapter {
 
         @Override
         public void visit(MethodCallExpr n, Object arg) {
@@ -299,7 +299,7 @@ public class Parser {
                 for(Expression t:n.getArgs())
                     parameters.add(((String) arg)+"|"+n.getName()+"|"+t.toString());
         }
-    }
+    }*/
     
     private class MethodCallVisitor extends VoidVisitorAdapter {
 
@@ -309,7 +309,7 @@ public class Parser {
             if(n.getArgs()!=null){
                 numArgs = n.getArgs().size();
                 
-                for(Expression argExpr : n.getArgs()){
+                /*for(Expression argExpr : n.getArgs()){
                     String e = argExpr.toString();
                     //System.out.println(e);
                     //System.out.println("     " + getAttributes(e.trim()).toString());
@@ -319,19 +319,19 @@ public class Parser {
                         accesses.add(n.getName()+"("+numArgs+")|"+cl+"."+t);
                     }
                     
-                    /*e=e.replace("this.", "");
+                    e=e.replace("this.", "");
                     e=e.split("\\[")[0];
                     e=e.split("\\.")[0].trim();
                     if(!e.contains(" ")){
                         String temp = (String) arg;
                         accesses.add(n.getName()+"("+numArgs+")|"+temp.substring(0, temp.lastIndexOf('.'))+"."+e);
-                    }*/
-                }
+                    }
+                }*/
             }
             calls.add(((String) arg)+"|"+n.getName()+"("+numArgs+")");
         }
         
-        private HashSet<String> getAttributes(String e){
+        /*private HashSet<String> getAttributes(String e){
             Boolean parted = false;
             HashSet<String> attrs = new HashSet<String>();
             String t = e;
@@ -377,7 +377,7 @@ public class Parser {
                 attrs.add(e);
             }
             return attrs;
-        }
+        }*/
     }
     
     private class AttributeAccessVisitor extends VoidVisitorAdapter {

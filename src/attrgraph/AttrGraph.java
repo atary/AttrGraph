@@ -30,12 +30,12 @@ public class AttrGraph {
         //url = "/depot/Work/Academic/Students/PhD/Atakan Aral/javaParser";
         //url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
         //url="/home/atakan/javaParser";
-        //url = "C:/javaParser";
+        url = "C:/javaParser";
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
         
         //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/HighRandIndexSample";
         //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/LowRandIndexSample";
-        url = "C:/Users/Æ/Desktop/Dropbox/Tolga Ovatman/JavaParser/javaParser";
+        //url = "C:/Users/Æ/Desktop/Dropbox/Tolga Ovatman/JavaParser/javaParser";
         for(File f : FileUtils.listFiles(new File(url), new String[]{"java"}, true)){
             classParser.parse(f);
         }
@@ -53,14 +53,16 @@ public class AttrGraph {
 
         //Visualizer.visualizeGraph(Grapher.getCoopMethodsGraph(classParser.getMethods(), classParser.getCalls()));
         //Visualizer.visualizeGraph(Grapher.getMethodLayoutGraph(classParser.getMethods()));
-        
+        //Visualizer.visualizeGraph(Grapher.getCoopAttrsGraph(classParser.getAttributes(),classParser.getCalls(),classParser.getAccesses()));
+        //Visualizer.visualizeGraph(Grapher.getAttrLayoutGraph(classParser.getAttributes()));
+
         
         Clusterer c = new Clusterer();
         System.out.println("Coop Graph\n\n");
-        c.cluster(Grapher.getCoopMethodsGraph(classParser.getMethods(), classParser.getCalls()));
+        c.cluster(Grapher.getCoopAttrsGraph(classParser.getAttributes(),classParser.getCalls(),classParser.getAccesses()));
 
         System.out.println("\n\nLayout Graph\n\n");
-        c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods()));
+        c.cluster(Grapher.getAttrLayoutGraph(classParser.getAttributes()));
         
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
         //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));

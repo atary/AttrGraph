@@ -42,9 +42,10 @@ public class Clusterer {
             i++;
         }
         
-        System.out.print("c(");
+        System.out.print("c("+clustersIndexed.pollFirstEntry().getValue());
         for(Map.Entry<Integer,Integer> e:clustersIndexed.entrySet())
-            System.out.print(e.getValue()+",");
+            System.out.print(","+e.getValue());
+        System.out.print(")");
         
         
         vertexDict.clear();

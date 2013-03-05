@@ -6,8 +6,10 @@ package attrgraph;
 
 import edu.uci.ics.jung.io.GraphIOException;
 import japa.parser.ParseException;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.apache.commons.io.FileUtils;
@@ -31,6 +33,7 @@ public class AttrGraph {
         //url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
         //url="/home/atakan/javaParser";
         url = "C:/javaParser";
+        String projectName = url.replace(url.substring(0, url.lastIndexOf("/")+1), "");
         //url = "C:/Users/Atakan/Desktop/eclipse workspace/Structure101Test/src/test";
         
         //url = "C:/Users/Atakan Aral/Documents/NetBeansProjects/HighRandIndexSample";
@@ -60,13 +63,30 @@ public class AttrGraph {
         //System.out.println(classParser.getCalls().size());
         
         Clusterer c = new Clusterer();
-        System.out.println("Call Graph\n\n");
-        c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
-
-        System.out.println("\n\nLayout Graph\n\n");
-        c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods()));
         
+        //System.out.println("Coop Methods Graph\n\na<-");
+        System.out.print("a<-");
+        c.cluster(Grapher.getCoopMethodsGraph(classParser.getMethods(), classParser.getCalls()));
+
+        //System.out.println("\n\nMethod Call Graph\n\nb<-");
+        System.out.print("\nb<-");
+        c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
+        
+        //System.out.println("\n\nInternal Method Call Graph\n\nc<-");
+        System.out.print("\nc<-");
+        c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getInternalCalls()));
+
+        //System.out.println("\n\nMethod Layout Graph\n\nd<-");
+        System.out.print("\nd<-");
+        c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods()));
+        System.out.println("\nadjustedRandIndex(a,b)");
+        System.out.println("adjustedRandIndex(a,c)");
+        System.out.println("adjustedRandIndex(a,d)");
+        System.out.println("adjustedRandIndex(b,c)");
+        System.out.println("adjustedRandIndex(b,d)");
+        System.out.println("adjustedRandIndex(c,d)");
         System.out.println("\n\n");
+        
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
         //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));
         

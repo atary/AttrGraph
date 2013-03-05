@@ -80,31 +80,19 @@ public class Grapher {
     
     public static Graph<String, Integer> getCoopAttrsGraph(HashSet<String> attributes, HashSet<String> calls, HashSet<String> accesses){
         Graph<String, Integer> g = new SparseGraph<String, Integer>();
-        System.out.println(attributes.size());
-        System.out.println(calls.size());
-        System.out.println(accesses.size());
+
         for(String a : attributes){
             g.addVertex(a);
         }       
         int id =0;
         
         HashMap<String, String> attrsInMethods = new HashMap<>();
-        HashMap<String, String> methodsInAttrs = new HashMap<>();
         
         for(String access : accesses){
             String method = access.split("\\|")[0];
             String attr = access.split("\\|")[1];
             
             if(!attributes.contains(attr)) continue;
-            
-            if(!methodsInAttrs.containsKey(attr)){
-                methodsInAttrs.put(attr, method);
-            }
-            else{
-                String value = methodsInAttrs.get(attr);
-                methodsInAttrs.put(attr, value+"|"+method);
-            }
-            
             if(!attrsInMethods.containsKey(method)){
                 attrsInMethods.put(method, attr);
             }
@@ -114,9 +102,24 @@ public class Grapher {
             }
         }
         
-        System.out.println(attrsInMethods.size());
-        System.out.println(methodsInAttrs.size());
-        
+        /*HashMap<String, String> attrsInClasses = new HashMap<>();
+        for(String attribute : attributes){
+            String attrClass = attribute.substring(0, attribute.lastIndexOf('.'));
+            for(String method : methods){
+                String methodClass = method.substring(0, method.lastIndexOf('.'));
+                if(methodClass.equals(attrClass)){
+                    if(!attrsInClasses.containsKey(method)){
+                        attrsInClasses.put(method, attribute);
+                    }
+                    else{
+                        String value = attrsInClasses.get(method);
+                        attrsInClasses.put(method, value+"|"+attribute);
+                    }
+                }
+            }
+        }*/
+
+                
         HashMap<String, String> methodsInMethods = new HashMap<>();
         for(String call : calls){
             String caller = call.split("->")[0];
@@ -130,29 +133,26 @@ public class Grapher {
                 methodsInMethods.put(caller, value+"|"+callee);
             }
         }
-        
-        System.out.println(methodsInMethods.size());
-        
-        for(String attr1 : methodsInAttrs.keySet()){
-            String callerString = methodsInAttrs.get(attr1);
-            if(callerString == null) continue;
-            String[] callerArray = callerString.split("\\|");
-            for(String callerMethod : callerArray){
-                String calleeString = methodsInMethods.get(callerMethod);
-                if(calleeString == null) continue;
-                String[] calleeArray = calleeString.split("\\|");
-                for(String calleeMethod : calleeArray){
-                    String attrString = attrsInMethods.get(calleeMethod);
-                    if(attrString == null) continue;
-                    String[] attrArray = attrString.split("\\|");
-                    for(String attr2 : attrArray){
-                        if(attr1.equals(attr2)) continue;
-                        g.addEdge(id++, attr1, attr2);
+                
+        for(String caller : methodsInMethods.keySet()){
+            String calleeString = methodsInMethods.get(caller);
+            if(calleeString == null) continue;
+            String[] calleeArray = calleeString.split("\\|");
+            for(String callee : calleeArray){
+                String callerAttrString = attrsInMethods.get(caller);
+                String calleeAttrString = attrsInMethods.get(callee);
+                if(callerAttrString == null || calleeAttrString == null) continue;
+                String[] callerAttrArray = callerAttrString.split("\\|");
+                String[] calleeAttrArray = calleeAttrString.split("\\|");
+                for(String callerAttr : callerAttrArray){
+                    for(String calleeAttr: calleeAttrArray){
+                        if(!callerAttr.equals(calleeAttr)){
+                            g.addEdge(id++, callerAttr, calleeAttr);
+                        }
                     }
                 }
             }
-        }
-        
+        }    
         return g;
     }
     

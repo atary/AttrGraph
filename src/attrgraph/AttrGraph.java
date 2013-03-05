@@ -55,15 +55,18 @@ public class AttrGraph {
         //Visualizer.visualizeGraph(Grapher.getMethodLayoutGraph(classParser.getMethods()));
         //Visualizer.visualizeGraph(Grapher.getCoopAttrsGraph(classParser.getAttributes(),classParser.getCalls(),classParser.getAccesses()));
         //Visualizer.visualizeGraph(Grapher.getAttrLayoutGraph(classParser.getAttributes()));
-
+        
+        //System.out.println(classParser.getInternalCalls().size());
+        //System.out.println(classParser.getCalls().size());
         
         Clusterer c = new Clusterer();
-        System.out.println("Coop Graph\n\n");
-        c.cluster(Grapher.getCoopAttrsGraph(classParser.getAttributes(),classParser.getCalls(),classParser.getAccesses()));
+        System.out.println("Call Graph\n\n");
+        c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
 
         System.out.println("\n\nLayout Graph\n\n");
-        c.cluster(Grapher.getAttrLayoutGraph(classParser.getAttributes()));
+        c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods()));
         
+        System.out.println("\n\n");
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
         //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));
         

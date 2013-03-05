@@ -97,7 +97,9 @@ public class Parser {
             String caller = call.split("\\|")[0];
             String callee = call.split("\\|")[1];
             String className = caller.substring(0, caller.lastIndexOf('.'));
-            temp.add(caller + "->" + className + "." + callee);
+            if(methods.contains(className + "|" + callee)){
+                temp.add(caller + "->" + className + "." + callee);
+            }
         }
         return temp;
     }
@@ -384,13 +386,19 @@ public class Parser {
 
         @Override
         public void visit(AssignExpr n, Object arg) {
-            String e = n.getTarget().toString();
-            e=e.replace("this.", "");
-            e=e.split("\\[")[0];
-            if(!e.contains("\\.")){
-                String mt = (String) arg;
-                String cl = mt.substring(0, mt.lastIndexOf('.'));
-                accesses.add(mt+"|"+cl+"."+e);
+            String e1 = n.getTarget().toString();
+            String e2 = n.getValue().toString();
+            e1=e1.replace("this.", "");
+            e1=e1.split("\\[")[0];
+            e2=e2.replace("this.", "");
+            e2=e2.split("\\[")[0];
+            String mt = (String) arg;
+            String cl = mt.substring(0, mt.lastIndexOf('.'));
+            if(!e1.contains("\\.")){
+                accesses.add(mt+"|"+cl+"."+e1);
+            }
+            if(!e2.contains("\\.")){
+                accesses.add(mt+"|"+cl+"."+e2);
             }
         }
     }
@@ -398,7 +406,7 @@ public class Parser {
     private String getMethodClass(String mn){
         if(conflicts.contains(mn)){
             conflictCount++;
-            return "EXTERNAL";
+            //return "EXTERNAL";
         }
         String classWithPackage = methodClasses.get(mn);
         return classWithPackage == null ? "EXTERNAL" : classWithPackage;

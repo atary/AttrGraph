@@ -71,35 +71,33 @@ public class AttrGraph {
         dir.mkdir();
         file.createNewFile();
         FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        BufferedWriter out = new BufferedWriter(fw);
-        
-        
-        //System.out.println("Coop Methods Graph\n\na<-");
-        out.write("a<-");
-        out.write(c.cluster(Grapher.getCoopMethodsGraph(classParser.getMethods(), classParser.getCalls())));
+        try (BufferedWriter out = new BufferedWriter(fw)) {
+            out.write("a<-");
+            out.write(c.cluster(Grapher.getCoopMethodsGraph(classParser.getMethods(), classParser.getCalls())));
 
-        //System.out.println("\n\nMethod Call Graph\n\nb<-");
-        out.write("\nb<-");
-        out.write(c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls())));
-        
-        //System.out.println("\n\nInternal Method Call Graph\n\nc<-");
-        out.write("\nc<-");
-        out.write(c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getInternalCalls())));
+            //System.out.println("\n\nMethod Call Graph\n\nb<-");
+            out.write("\nb<-");
+            out.write(c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls())));
+            
+            //System.out.println("\n\nInternal Method Call Graph\n\nc<-");
+            out.write("\nc<-");
+            out.write(c.cluster(Grapher.getCallGraph(classParser.getMethods(), classParser.getInternalCalls())));
 
-        //System.out.println("\n\nMethod Layout Graph\n\nd<-");
-        out.write("\nd<-");
-        out.write(c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods())));
-        out.write("\nadjustedRandIndex(a,b)");
-        out.write("\nadjustedRandIndex(a,c)");
-        out.write("\nadjustedRandIndex(a,d)");
-        out.write("\nadjustedRandIndex(b,c)");
-        out.write("\nadjustedRandIndex(b,d)");
-        out.write("\nadjustedRandIndex(c,d)\n");
-        
-        //out.write(textToSave);
-        out.close();
-        
-        System.out.println("R script is written to " + outputFile);
+            //System.out.println("\n\nMethod Layout Graph\n\nd<-");
+            out.write("\nd<-");
+            out.write(c.cluster(Grapher.getMethodLayoutGraph(classParser.getMethods())));
+            out.write("\nadjustedRandIndex(a,b)");
+            out.write("\nadjustedRandIndex(a,c)");
+            out.write("\nadjustedRandIndex(a,d)");
+            out.write("\nadjustedRandIndex(b,c)");
+            out.write("\nadjustedRandIndex(b,d)");
+            out.write("\nadjustedRandIndex(c,d)\n");
+            System.out.println("R script is successfully created at '" + outputFile + "'");
+            out.close();
+        }
+        catch(IOException e){
+            System.out.println("Failed to create R script: " + e.getMessage());
+        }
         
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
         //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));

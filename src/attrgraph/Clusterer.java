@@ -27,9 +27,9 @@ public class Clusterer {
         clustersIndexed = new TreeMap<Integer,Integer>();
     }
     
-    public void cluster(Graph<String,Integer> g){
+    public String cluster(Graph<String,Integer> g){
         hashVertex(g);
-        
+        String output = "";
         WeakComponentClusterer<String,Integer> clusterer = new WeakComponentClusterer<String,Integer>();
         
         Set<Set<String>> clusters = clusterer.transform(g);
@@ -42,15 +42,16 @@ public class Clusterer {
             i++;
         }
         
-        System.out.print("c("+clustersIndexed.pollFirstEntry().getValue());
+        output = "c("+clustersIndexed.pollFirstEntry().getValue();
         for(Map.Entry<Integer,Integer> e:clustersIndexed.entrySet())
-            System.out.print(","+e.getValue());
-        System.out.print(")");
+            output += ","+e.getValue();
+        output += ")";
         
         
         vertexDict.clear();
         clustersIndexed.clear();
         
+        return output;
     }
     
     private void hashVertex(Graph<String,Integer> g){

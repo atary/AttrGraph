@@ -61,6 +61,7 @@ public class Parser {
         
         try {
             // parse the file
+            //System.out.println(f.getName());
             cu = JavaParser.parse(in);
         } finally {
             in.close();

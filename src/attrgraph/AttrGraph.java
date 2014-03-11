@@ -32,7 +32,7 @@ public class AttrGraph {
         //url = "/depot/Work/Academic/Students/PhD/Atakan Aral/javaParser";
         //url = "C:/Users/itü/Desktop/Dropbox/Dropbox/AtakanAral/JavaParser/javaParser";
         //url="/home/atakan/javaParser";
-        url = "C:/javaParser";
+        url = "C:/test/installer";
         String outputPath = "C:/ClusteringResults/";
         String outputFile = url.replace(url.substring(0, url.lastIndexOf("/")+1), "");
         outputFile = outputPath + outputFile + ".txt";
@@ -100,8 +100,7 @@ public class AttrGraph {
         }
         
         //GraphIO.writeGraphML(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()),"/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml");
-        //Visualizer.visualizeCallGraph(GraphIO.readGraphML("/depot/Work/Academic/Students/PhD/Atakan Aral/NetworkX/parser.graphml"));
-        
+        Visualizer.visualizeGraph(Grapher.getCallGraph(classParser.getMethods(), classParser.getCalls()));
         //classParser.printConflicts();
         
         //dbop.connectDB();
